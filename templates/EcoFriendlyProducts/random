@@ -1,0 +1,136 @@
+products.html
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="products.js" defer></script> <!-- Link to JavaScript file -->
+<link rel="stylesheet" href="styles.css"> <!-- Optional: Link to external stylesheet -->
+</head>
+<body>
+  <div class="container">
+    <h1>All Products</h1>
+    <div class="row" id="products-container">
+      <!-- Products will be inserted here by JavaScript -->
+    </div>
+  </div>
+  <script>
+    // Fetch products from the server and display them
+    fetch('/api/products')
+      .then(response => response.json())
+      .then(products => {
+        const productsContainer = document.getElementById('products-container');
+        products.forEach(product => {
+          const productHtml = `
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="box">
+                <a href="">
+                  <div class="img-box">
+                    <img src="${product.imageSrc}" alt="${product.imageAlt}">
+                  </div>
+                  <div class="detail-box">
+                    <h6>${product.name}</h6>
+                    <h6>
+                      Price
+                      <span>$${product.price}</span>
+                    </h6>
+                  </div>
+                  <div class="new">
+                    <span>${product.label}</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          `;
+          productsContainer.insertAdjacentHTML('beforeend', productHtml);
+        });
+      })
+      .catch(error => console.error('Error fetching products:', error));
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+Product js
+
+// all-products.js
+
+document.addEventListener('DOMContentLoaded', function() {
+  const productContainer = document.getElementById('product-container');
+
+  // Example data (replace with actual product data retrieval)
+  const products = JSON.parse(localStorage.getItem('products')) || [];
+
+  // Function to generate HTML for each product
+  function generateProductHTML(product) {
+      return `
+          <div class="col-sm-6 col-md-4 col-lg-3">
+              <div class="box">
+                  <a href="">
+                      <div class="img-box">
+                          <img src="${product.imageSrc}" alt="${product.imageAlt}">
+                      </div>
+                      <div class="detail-box">
+                          <h6>${product.name}</h6>
+                          <h6>Price <span>$${product.price}</span></h6>
+                      </div>
+                      <div class="new">
+                          <span>New</span>
+                      </div>
+                  </a>
+              </div>
+          </div>
+      `;
+  }
+
+  // Loop through products and generate HTML for each
+  products.forEach(product => {
+      const productHTML = generateProductHTML(product);
+      productContainer.insertAdjacentHTML('beforeend', productHTML);
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+<div class="btn-box">
+        <a href="">View All Products</a>
+      </div>
+      <script src="script.js"></script>
+    </div>
+  </section>
+
+  
+  <div id="product-container" class="container"></div>
+        <!-- Products will be dynamically added here -->
+  <div class="btn-box">
+    <a href="products.html">View All Products</a>
+  </div>
+  <script src="script.js" defer></script> 
+</section>
+  <!-- Link to JavaScript file -->
+
+  <!-- end shop section -->

@@ -1,0 +1,290 @@
+{% extends "EcoFriendlyProducts/base.html" %}
+{% block extra_head %}
+    <style>
+        .img-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .img-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+    </style>
+{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="hero_area">
+        <!-- slider section -->
+        <section class="slider_section">
+            <div class="slider_container">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                            <h1>Elite Product Deals</h1> <h5>Welcome to Elite Product Deals</h5>  <br>
+                                            <p>
+                                                Discover top-quality, eco-friendly products at GreenEra!
+                                                Our e-commerce website is dedicated to bringing you a wide
+                                                range of sustainable items. Whether you're looking for recyclable gadgets,
+                                                eco-friendly home essentials, or anything in between, we've got you covered.
+                                            </p>
+                                            <a href=" ">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                           <img src="{% static 'images/slider-img-2.png' %}" alt="Slider Image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item ">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                           <h1>Elite Product Deals</h1> <h5>Welcome to Elite Product Deals </h5>  <br>
+                                            <p>
+                                                Discover the best deals on top-quality products at Elite Product Deals!
+                                                Our e-commerce website is dedicated to bringing you amazing discounts on
+                                                a wide range of items. Whether you're looking for the latest gadgets,
+                                                stylish fashion, home essentials, or anything in between, we've got you
+                                                covered.
+                                            </p>
+                                            <a href="">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                            <img src="{% static 'images/slider-img-3.png' %}" alt="Slider Image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item ">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="detail-box">
+                                            <h1>Elite Product Deals</h1> <h5>Welcome to Elite Product Deals  </h5>  <br>
+                                            <p>
+                                                Discover the best deals on top-quality products at Elite Product Deals!
+                                                Our e-commerce website is dedicated to bringing you amazing discounts on
+                                                a wide range of items. Whether you're looking for the latest gadgets,
+                                                stylish fashion, home essentials, or anything in between, we've got you
+                                                covered.
+                                            </p>
+                                            <a href="">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 ">
+                                        <div class="img-box">
+                                            <img src="{% static 'images/slider-img.png' %}" alt="Slider Image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel_btn-box">
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                           data-slide="prev">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <img src="{% static 'images/line.png' %}" alt="Line Image">
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                           data-slide="next">
+                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- end slider section -->
+    </div>
+    <!-- end hero area -->
+
+    <!-- shop section -->
+
+    <section class="shop_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>
+                    Latest Products
+                </h2>
+            </div>
+            <div class="row">
+                {% for product in products %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="box">
+                        <a href="{% url 'product_detail' product.id %}">
+                            <div class="img-box">
+                                <img src="{{ product.image_url }}" alt="Image of {{ product.name }}">
+                            </div>
+                            <div class="detail-box">
+                                <h6>
+                                    {{ product.name }}
+                                </h6>
+                                <h6>
+
+                                    <span>
+                                        ${{ product.price }}
+                                    </span>
+                                </h6>
+                            </div>
+                            <div class="new">
+                                <span>
+                                    New
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="btn-box">
+                <a href="{% url 'view-all-products' %}">
+                    View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+<section id="why-us" class="why_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Why Shop With Us
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box ">
+                    <div class="img-box">
+                        <img src="{% static 'icons/recycle-sign.png' %}" alt="Fast Delivery Icon">
+                    </div>
+                    <div class="detail-box">
+                        <h5>
+                            Recyclable
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box ">
+                    <div class="img-box">
+                        <img src="{% static 'icons/cruelty-free256.png' %}" alt="Free Shipping Icon">
+                    </div>
+                    <div class="detail-box">
+                        <h5>
+                            Cruelty Free
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box ">
+                    <div class="img-box">
+                        <img src="{% static 'icons/environmentalism.png' %}" alt="Best Quality Icon">
+                    </div>
+                    <div class="detail-box">
+                        <h5>
+                            Eco Friendly
+                            <p>You have visited this page {{ user_visits_today }} times today.</p>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <section id="contact-us" class="contact_section ">
+        <div class="container px-0">
+            <div class="heading_container ">
+                <h2 class="">
+                    Contact Us
+                </h2>
+            </div>
+        </div>
+        <div class="container container-bg">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 px-0">
+                    <div class="map_container">
+                        <div class="map-responsive">
+                            <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=University+Of+Windsor"
+                                    width="600" height="300" frameborder="0" style="border:0; width: 100%; height:100%"
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="col align-items-center flex-col">
+                    <form method="post" action="{% url 'main' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" name="name" placeholder="Name" value="{{ form.name.value|default:'' }}" required />
+                        </div>
+                        <div class="input-group">
+                            <input type="email" name="email" placeholder="Email" value="{{ form.email.value|default:'' }}" required />
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="phone" placeholder="Phone" value="{{ form.phone.value|default:'' }}" required />
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="message" class="message-box" placeholder="Message" value="{{ form.message.value|default:'' }}" required />
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit">
+                                SEND
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <script>
+    {% if messages %}
+        alert("{% for message in messages %}{{ message }}{% endfor %}");
+    {% endif %}
+</script>
+<script src="{% static 'EcoFriendlyProducts/js/script.js' %}"></script>
+
+{% endblock %}

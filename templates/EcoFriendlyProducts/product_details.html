@@ -1,0 +1,309 @@
+{% extends "EcoFriendlyProducts/base.html" %}
+{% load static %}
+{% block extra_head %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #eaf4e2;
+        margin: 0;
+        padding: 0;
+    }
+    .product-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 40px auto;
+        padding: 20px;
+        max-width: 1000px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+    .product-details {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: flex-start;
+    }
+    .img-box {
+        flex: 1;
+        max-width: 400px;
+        margin-right: 20px;
+    }
+    .img-box img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+    .detail-box {
+        flex: 2;
+        padding: 10px 20px;
+        background-color: #f0f8f0;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .detail-box h6, .detail-box p {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #333;
+    }
+    .detail-box span {
+        color: #28a745;
+        font-weight: bold;
+    }
+    .eco-icons {
+        margin-top: 20px;
+    }
+    .eco-icons img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+    }
+    .reviews-container {
+        width: 100%;
+        max-width: 700px;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #f0f8f0;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        max-height: 400px; /* Adjust as needed */
+    }
+    .reviews-container h5 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .review-box {
+        border-top: 1px solid #ddd;
+        padding: 10px 0;
+        margin-bottom: 10px;
+    }
+    .review-title {
+        font-weight: bold;
+        font-size: 18px;
+        color: #555;
+    }
+    .review-text {
+        margin-top: 5px;
+        font-size: 16px;
+        color: #333;
+    }
+    .review-footer {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #777;
+    }
+    .login-button, .add-review-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .login-button:hover, .add-review-button:hover {
+        background-color: #0056b3;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+        padding-top: 60px;
+        backdrop-filter: blur(5px);
+    }
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border: none;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        font-size: 2em;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        color: #ddd;
+        cursor: pointer;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating input:checked ~ label ~ label {
+        color: #f5c518;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f5c518;
+    }
+    .modal form {
+        display: flex;
+        flex-direction: column;
+    }
+    .modal form label {
+        margin: 10px 0 5px;
+    }
+    .modal form input, .modal form textarea {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+    .modal form button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .modal form button:hover {
+        background-color: #218838;
+    }
+    .buy-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007BFF;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.buy-button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="product-container">
+    <div class="product-details">
+        <div class="img-box">
+             <img src="{{ product.image_url }}" alt="Image of {{ product.name }}">
+            <br>
+            <br>
+            <center><a href="{{ product.link }}" class="buy-button">Buy Now</a></center>
+
+        </div>
+        <div class="detail-box">
+            <h6>Name: {{ product.name }}</h6>
+            <p>Description: {{ product.description }}</p>
+            <h6>Price: <span>${{ product.price }}</span></h6>
+            <p>Eco Certification: {{ product.eco_certification }}</p>
+            <p>Category: {{ product.category }}</p>
+            <p>Brand: {{ product.brand }}</p>
+            <p>Weight: {{ product.weight }} kg</p>
+            <p>Dimensions: {{ product.dimensions }}</p>
+            <p>Material: {{ product.material }}</p>
+            <p>Manufacturing Location: {{ product.manufacturing_location }}</p>
+            <p>Packaging Type: {{ product.packaging_type }}</p>
+            <div class="eco-icons">
+                {% if product.recyclable %}
+                <img src="{% static 'icons/recyclable.png' %}" alt="Recyclable">
+                {% endif %}
+                {% if product.biodegradable %}
+                <img src="{% static 'icons/biodegradable.png' %}" alt="Biodegradable">
+                {% endif %}
+                {% if product.cruelty_free %}
+                <img src="{% static 'icons/cruelty_free.png' %}" alt="Cruelty Free">
+                {% endif %}
+                {% if product.energy_efficient %}
+                <img src="{% static 'icons/energy_efficient.png' %}" alt="Energy Efficient">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="reviews-container">
+        <h5>Customer Reviews</h5>
+        {% for review in reviews %}
+        <div class="review-box">
+            <div class="review-title">{{ review.review_title }}</div>
+            <div class="review-text">{{ review.review_text }}</div>
+            <div class="review-footer">
+                Rating: {{ review.rating }} | Verified Purchase: {{ review.verified_purchase|yesno:"Yes,No" }} | {{ review.user.username }} on {{ review.created_at|date:"F j, Y" }}
+            </div>
+        </div>
+        {% empty %}
+        <p>No reviews yet. Be the first to review this product!</p>
+        {% endfor %}
+        {% if not isUserAddedReview %}
+        <button class="add-review-button" onclick="openModal()">Add a Review</button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Add a Review</h2>
+        <form method="post" action="{% url 'add_review' product.id %}">
+            {% csrf_token %}
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required /><label for="star5">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4" required /><label for="star4">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3" required /><label for="star3">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2" required /><label for="star2">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1" required /><label for="star1">&#9733;</label>
+            </div><br>
+            <label for="review_title">Review Title:</label>
+            <input type="text" id="review_title" name="review_title" maxlength="255" required>
+            <label for="review_text">Review Text:</label>
+            <textarea id="review_text" name="review_text" rows="4" required></textarea>
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById("reviewModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("reviewModal").style.display = "none";
+    }
+</script>
+{% endblock %}

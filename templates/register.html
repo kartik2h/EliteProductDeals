@@ -1,0 +1,197 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenEra</title>
+    <link rel="stylesheet" href="{% static 'EcoFriendlyProducts/register.css' %}">
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .input-field:invalid {
+            border-color: red;
+        }
+    </style>
+    <script>
+        function validateForm(event) {
+            let isValid = true;
+
+            // Username validation
+            const username = document.getElementById('registerUsername');
+            const usernameError = document.getElementById('usernameError');
+            if (username.value.trim() === '') {
+                usernameError.textContent = 'Username is required';
+                isValid = false;
+            } else {
+                usernameError.textContent = '';
+            }
+
+            // Email validation
+            const email = document.getElementById('registerEmail');
+            const emailError = document.getElementById('emailError');
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (email.value.trim() === '') {
+                emailError.textContent = 'Email is required';
+                isValid = false;
+            } else if (!email.value.match(emailPattern)) {
+                emailError.textContent = 'Enter a valid email address';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            // Password validation
+            const password = document.getElementById('registerPassword');
+            const passwordError = document.getElementById('passwordError');
+            if (password.value.trim() === '') {
+                passwordError.textContent = 'Password is required';
+                isValid = false;
+            } else if (password.value.length < 8) {
+                passwordError.textContent = 'Password must be at least 8 characters';
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            // Confirm password validation
+            const confirmPassword = document.getElementById('registerConfirmPassword');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            if (confirmPassword.value.trim() === '') {
+                confirmPasswordError.textContent = 'Confirm password is required';
+                isValid = false;
+            } else if (confirmPassword.value !== password.value) {
+                confirmPasswordError.textContent = 'Passwords do not match';
+                isValid = false;
+            } else {
+                confirmPasswordError.textContent = '';
+            }
+
+            // If the form is invalid, prevent submission
+            if (!isValid) {
+                event.preventDefault();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const signUpForm = document.getElementById('signUpForm');
+            signUpForm.addEventListener('submit', validateForm);
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container" class="container">
+        <!-- FORM SECTION -->
+        <div class="row">
+            <!-- SIGN UP -->
+            <div class="col align-items-center flex-col sign-up">
+                <div class="form-wrapper align-items-center">
+                    <div class="form sign-up">
+                       <!-- Registration Form -->
+                        <form id="signUpForm" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <label for="registerUsername">Username</label>
+                                <input type="text" id="registerUsername" class="input-field" name="username" value="{{ form.username.value|default_if_none:'' }}" required>
+                                {{ form.username.errors.as_text }}
+                            </div>
+                            <div class="input-group">
+                                <label for="registerEmail">Email</label>
+                                <input type="email" id="registerEmail" class="input-field" name="email" value="{{ form.email.value|default_if_none:'' }}" required>
+                                {{ form.email.errors.as_text }}
+                            </div>
+                            <div class="input-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" id="registerPassword" class="input-field" name="password1" required>
+                                {{ form.password1.errors.as_text }}
+                            </div>
+                            <div class="input-group">
+                                <label for="registerConfirmPassword">Confirm Password</label>
+                                <input type="password" id="registerConfirmPassword" class="input-field" name="password2" required>
+                                {{ form.password2.errors.as_text }}
+                            </div>
+                            <div class="input-group">
+                                <label for="registerImage">Profile Image</label>
+                                <input type="file" id="registerImage" class="input-field" name="image">
+                                {{ form.image.errors.as_text }}
+                            </div>
+                            <button type="submit" class="btn-register"><strong>Sign Up</strong></button>
+                            <p>
+                                <span>Already have an account?</span>
+                                <b onclick="toggle()" class="pointer">Sign in here</b>
+                            </p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- END SIGN UP -->
+            <!-- SIGN IN -->
+            <div class="col align-items-center flex-col sign-in">
+                <div class="form-wrapper align-items-center">
+                    <div class="form sign-in">
+                                <!-- Login Form -->
+                                <form method="post" id="signInForm" action="{% url 'login' %}">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <label for="signInUsername">Username</label>
+                                        <input type="text" id="signInUsername" name="username" class="input-field" required>
+                                        {{ form.username.errors.as_text }}
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="signInPassword">Password</label>
+                                        <input type="password" id="signInPassword" name="password" class="input-field" required>
+                                        {{ form.password.errors.as_text }}
+                                    </div>
+                                    <button type="submit" class="btn-register"><strong>Login</strong></button>
+                                    <p>
+                                        <span>Don't have an account?</span>
+                                        <b onclick="toggle()" class="pointer">Register here</b>
+                                    </p>
+                                    <p>
+                                        <span>Forgot password?</span>
+                                        <a href="{% url 'forgot_password_view' %}">Click here</a>
+                                    </p>
+                        </form>
+                    </div>
+                </div>
+                <div class="form-wrapper">
+                </div>
+            </div>
+            <!-- END SIGN IN -->
+        </div>
+        <!-- END FORM SECTION -->
+        <!-- CONTENT SECTION -->
+        <div class="row content-row">
+            <!-- SIGN IN CONTENT -->
+            <div class="col align-items-center flex-col">
+                <div class="text sign-in">
+                    <h2>
+                        <img src="{% static 'EcoFriendlyProducts/photos/Logo.png' %}" alt="EliteProductDeals Logo">
+                    </h2>
+                </div>
+                <div class="img sign-in">
+                </div>
+            </div>
+            <!-- END SIGN IN CONTENT -->
+            <!-- SIGN UP CONTENT -->
+            <div class="col align-items-center flex-col">
+                <div class="img sign-up">
+                </div>
+                <div class="text sign-up">
+                    <h2>
+                        <img src="{% static 'EcoFriendlyProducts/photos/Logo.png' %}" alt="EliteProductDeals Logo">
+                    </h2>
+                </div>
+            </div>
+            <!-- END SIGN UP CONTENT -->
+        </div>
+        <!-- END CONTENT SECTION -->
+    </div>
+    <script src="{% static 'EcoFriendlyProducts/js/script.js' %}"></script>
+</body>
+</html>

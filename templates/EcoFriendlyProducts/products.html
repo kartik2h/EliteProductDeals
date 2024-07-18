@@ -1,0 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+
+  <title>
+    Eco Friendly Products
+  </title>
+
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="hero_area">
+    <!-- header section starts -->
+    <header class="header_section">
+      <nav class="navbar navbar-expand-lg custom_nav-container ">
+        <a class="navbar-brand" href="{% url 'main' %}">
+          <span>
+            Elite Product Deals
+          </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class=""></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'main' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'view-all-products' %}">
+                Shop
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="why.html">
+                Why Us
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact Us</a>
+            </li>
+          </ul>
+          <div class="user_option">
+            {% if user.is_authenticated %}
+              <span><a href="{% url 'logout' %}">Logout</a></span>
+            {% else %}
+              <span><a href="{% url 'login' %}">Login</a></span>
+            {% endif %}
+            <a href="">
+              <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            </a>
+            <form class="form-inline">
+              <button class="btn nav_search-btn" type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- end header section -->
+  </div>
+  <!-- end hero area -->
+
+  <!-- shop section -->
+  <section class="shop_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Product Details
+        </h2>
+      </div>
+      <div class="row">
+        {% for product in products %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="product">
+            <div class="img-box">
+              <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            </div>
+            <div class="detail-box">
+              <h5>{{ product.name }}</h5>
+              <p>{{ product.description }}</p>
+              <p><strong>Price:</strong> ${{ product.price }}</p>
+              <div class="reviews">
+                <h6>Reviews:</h6>
+                {% for review in product.userrating_set.all %}
+                    <div class="review">
+                        <p><strong>{{ review.user.username }}:</strong> {{ review.rating }} stars</p>
+                        <p><strong>{{ review.review_title }}</strong></p>
+                        <p>{{ review.review_text }}</p>
+                    </div>
+                {% empty %}
+                    <p>No reviews yet.</p>
+                {% endfor %}
+            </div>
+              <p><strong>Eco Certification:</strong> {{ product.eco_certification }}</p>
+              <p><strong>Category:</strong> {{ product.category }}</p>
+              <p><strong>Brand:</strong> {{ product.brand }}</p>
+              <p><strong>Weight:</strong> {{ product.weight }} kg</p>
+              <p><strong>Dimensions:</strong> {{ product.dimensions }}</p>
+              <p><strong>Material:</strong> {{ product.material }}</p>
+              <p><strong>Manufacturing Location:</strong> {{ product.manufacturing_location }}</p>
+              <p><strong>Packaging Type:</strong> {{ product.packaging_type }}</p>
+              <p><strong>Recyclable:</strong> {{ product.recyclable }}</p>
+              <p><strong>Biodegradable:</strong> {{ product.biodegradable }}</p>
+              <p><strong>Cruelty Free:</strong> {{ product.cruelty_free }}</p>
+              <p><strong>Energy Efficient:</strong> {{ product.energy_efficient }}</p>
+              <!-- Display reviews for the product -->
+              <div class="reviews">
+                <h6>Reviews:</h6>
+                {% for review in reviews %}
+                  {% if review.product.id == product.id %}
+                    <div class="review">
+                      <p><strong>{{ review.user.username }}:</strong> {{ review.rating }} stars</p>
+                      <p><strong>{{ review.review_title }}</strong></p>
+                      <p>{{ review.review_text }}</p>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Include the JavaScript file -->
+  <script src="{% static 'js/products.js' %}" defer></script>
+</body>
+</html>
+

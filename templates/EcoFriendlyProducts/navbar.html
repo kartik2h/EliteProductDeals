@@ -1,0 +1,67 @@
+{% load static %}
+<header class="header_section">
+    <nav class="navbar navbar-expand-lg custom_nav-container ">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+{#            <a class="navbar-brand" href="{% url 'main' %}">#}
+{#                <img src="{% static 'EcoFriendlyProducts/photos/new-logo.png' %}" alt="Logo" class="navbar-logo">#}
+{#            </a>#}
+            <ul class="navbar-nav  ">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="{% url 'main' %}"> <img
+                            src="{% static 'EcoFriendlyProducts/photos/Logo.png' %}" alt="Logo" class="navbar-logo"><span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view-all-products' %}">
+                        Shop
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#why-us">
+                        Why Us
+                    </a>
+                </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="#contact-us">
+                        Contact Us
+                    </a>
+                </li>
+            </ul>
+            <div class="user_option">
+                <a href="">
+                    {% if user.is_authenticated %}
+                        <span><a href="{% url 'logout' %}">Logout</a></span>
+                    {% else %}
+                        <span><a href="{% url 'login' %}">Login</a></span>
+                    {% endif %}
+                </a>
+                <a href="">
+                    <i aria-hidden="true"></i>
+                    <!-- Display the user's photo using the URL from Django's media handling -->
+                    {% if user.image %}
+                        <img src="{{ user.image.url }}" alt="{{ user.username }}'s Profile Image"
+                             style="width: 16px; height: 16px;">
+                    {% else %}
+                        <img src="{% static 'icons/user.png' %}" alt="Default Profile Image"
+                             >
+                    {% endif %}
+                </a>
+                <form method="get" action="{% url 'shop' %}">
+                    <div class="input-group">
+                        <input type="text" name="q" placeholder="Search for products..." class="input-field">
+                        <button class="btn nav_search-btn" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
