@@ -49,65 +49,46 @@ def user_login(request):
     return render(request, 'register.html', {'form': form})
 
 
-@login_required
+
 def main(request):
     # Query all products from the database
     today = timezone.now().date()
     session_key = f"visited_{today}"
-    user_visit, created = UserDailyVisit.objects.get_or_create(
-        user=request.user, date=today,
-        defaults={'visits': 0}
-    )
+    context = {
+        'products': Product.objects.order_by('-created_at')[:8],
+        'form': ContactForm(request.POST or None)
+    }
 
-    if not request.session.get(session_key):
-        # Increment the user's visit count for today
+    if request.user.is_authenticated:
         user_visit, created = UserDailyVisit.objects.get_or_create(
             user=request.user, date=today,
             defaults={'visits': 0}
         )
-        user_visit.visits += 1
-        user_visit.save()
+        if not request.session.get(session_key):
+            user_visit.visits += 1
+            user_visit.save()
+            request.session[session_key] = True
 
-        # Mark in the session that this user has been counted today
-    request.session[session_key] = True
-    products = Product.objects.order_by('-created_at')[:8]
-    user = User.objects.get(id=request.user.id)
+        # Context data only for authenticated users
+        context.update({
+            'user_visits_today': user_visit.visits,
+            'total_user_visits': UserDailyVisit.objects.filter(user=request.user).aggregate(Sum('visits'))[
+                                     'visits__sum'] or 0,
+            'total_visits_today': UserDailyVisit.objects.filter(date=today).aggregate(Sum('visits'))[
+                                      'visits__sum'] or 0,
+            'total_visits_all_time': UserDailyVisit.objects.aggregate(Sum('visits'))['visits__sum'] or 0,
+            'user': request.user  # Passing the user object to the template
+        })
 
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            file_path = os.path.join(settings.EXCEL_FILES_DIR, 'contacts.xlsx')
-
-            if os.path.exists(file_path):
-                df = pd.read_excel(file_path)
-            else:
-                df = pd.DataFrame(columns=['Name', 'Email', 'Phone', 'Message'])
-
-            new_data = pd.DataFrame([{
-                'Name': data['name'],
-                'Email': data['email'],
-                'Phone': data['phone'],
-                'Message': data['message'],
-                'visits': request.session['visits']
-            }])
-
-            df = pd.concat([df, new_data], ignore_index=True)
-
-            df.to_excel(file_path, index=False)
-
-            #messages.success(request, 'Your message has been sent successfully!')
-            return redirect('main')
-    else:
-        form = ContactForm()
-
-    # Pass the products and form to the template
-    context = {
-        'products': products,
-        'user': user,
-        'form': form,
-        'user_visits_today': user_visit.visits
-    }
+    if request.method == 'POST' and context['form'].is_valid():
+        data = context['form'].cleaned_data
+        file_path = os.path.join(settings.EXCEL_FILES_DIR, 'contacts.xlsx')
+        df = pd.read_excel(file_path) if os.path.exists(file_path) else pd.DataFrame(
+            columns=['name', 'email', 'phone', 'message'])
+        new_data = pd.DataFrame([data])
+        df = pd.concat([df, new_data], ignore_index=True)
+        df.to_excel(file_path, index=False)
+        return redirect('main')
 
     return render(request, 'EcoFriendlyProducts/index.html', context)
 
