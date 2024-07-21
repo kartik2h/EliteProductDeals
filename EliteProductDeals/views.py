@@ -59,26 +59,26 @@ def main(request):
         'form': ContactForm(request.POST or None)
     }
 
-    if request.user.is_authenticated:
-        user_visit, created = UserDailyVisit.objects.get_or_create(
-            user=request.user, date=today,
-            defaults={'visits': 0}
-        )
-        if not request.session.get(session_key):
-            user_visit.visits += 1
-            user_visit.save()
-            request.session[session_key] = True
-
-        # Context data only for authenticated users
-        context.update({
-            'user_visits_today': user_visit.visits,
-            'total_user_visits': UserDailyVisit.objects.filter(user=request.user).aggregate(Sum('visits'))[
-                                     'visits__sum'] or 0,
-            'total_visits_today': UserDailyVisit.objects.filter(date=today).aggregate(Sum('visits'))[
-                                      'visits__sum'] or 0,
-            'total_visits_all_time': UserDailyVisit.objects.aggregate(Sum('visits'))['visits__sum'] or 0,
-            'user': request.user  # Passing the user object to the template
-        })
+    # if request.user.is_authenticated:
+    #     user_visit, created = UserDailyVisit.objects.get_or_create(
+    #         user=request.user, date=today,
+    #         defaults={'visits': 0}
+    #     )
+    #     if not request.session.get(session_key):
+    #         user_visit.visits += 1
+    #         user_visit.save()
+    #         request.session[session_key] = True
+    #
+    #     # Context data only for authenticated users
+    #     context.update({
+    #         'user_visits_today': user_visit.visits,
+    #         'total_user_visits': UserDailyVisit.objects.filter(user=request.user).aggregate(Sum('visits'))[
+    #                                  'visits__sum'] or 0,
+    #         'total_visits_today': UserDailyVisit.objects.filter(date=today).aggregate(Sum('visits'))[
+    #                                   'visits__sum'] or 0,
+    #         'total_visits_all_time': UserDailyVisit.objects.aggregate(Sum('visits'))['visits__sum'] or 0,
+    #         'user': request.user  # Passing the user object to the template
+    #     })
 
     if request.method == 'POST' and context['form'].is_valid():
         data = context['form'].cleaned_data
